@@ -1,0 +1,20 @@
+#!/bin/bash
+slice_path="/sys/fs/cgroup/memory/user.slice"
+memlimit=0
+userid=`id -u $PAM_USER`
+groups=`groups $PAM_USER`
+if [[ $groups == *Shell* ]]; then
+	memlimit=$((64*1024*1024))
+fi
+if [[ $groups == *Sponsor* ]]; then
+	memlimit=$((192*1024*1024))
+fi
+if [[ $groups == *Freund* ]]; then
+	memlimit=$((256*1024*1024))
+fi
+
+if [[ -d "$slice_path/user-$userid.slice" ]]; then
+	if [[ $memlimit != 0 ]]; then
+		echo $memlimit > $slice_path/user-$userid.slice/memory.limit_in_bytes
+	fi
+fi
