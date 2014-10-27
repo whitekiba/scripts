@@ -1,0 +1,29 @@
+#!/bin/bash
+main_opts="fvh"
+prefix="/home/whitekiba/Dev/firefox/versions"
+firefox_version=(10.0 10.0.1 10.0.12esr 17.0 17.0.11esr 24.8.1esr 31.2.0esr 32.0 32.0.2 32.0.3 34.0b3)
+
+source lib/functions.sh
+
+if [ `firefoxVersionExists $1` ]; then
+	startFirefox $1
+	exit
+fi
+
+while getopts $main_opts opts; do
+	case $opts in
+		f)
+			fetchNew
+			;;
+		h)
+			echo "Usage: -f fetch new Firefox"
+			exit 2;;
+		v)
+			listVersions
+			;;
+		*)
+			startFirefox $1
+			;;
+	esac
+done
+
