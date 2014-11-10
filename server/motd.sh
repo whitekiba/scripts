@@ -1,6 +1,7 @@
 #!/bin/bash
 #Beim verteilen ueber puppet sind die IPs durch facter werte zu ersetzen
 version="0.5.3"
+jobs_file="" #beim verteilen entsprechend anpassen
 usr_group=`id -gn`
 userid=`id -u`
 
@@ -27,6 +28,17 @@ if [[ $(whoami) == "whitekiba" ]]; then
 fi
 session_limit=`cat /etc/security/limits.conf | grep "$usr_group" | grep maxlogins | awk {'print $4'}`
 
+function get_open_jobs() {
+	job_list=`curl --connect-timeout 1 -s $jobs_file` #1 sec timeout damit der login nicht blockiert
+	if [[ "`echo "$job_list" | wc -l`" -gt 0 ]]; then
+		echo -e "\033[0;35m++++++++++++++:\033[0;37m Jobs \033[0;35m:++++++++++++++++++++"
+		echo -e "\033[0;35m+ \033[1;32mOffene Jobs für jedermann um Ressourcen zu verdienen."
+		while read -r line
+		do
+			echo -e "\033[0;35m+ \033[0m- $line"
+		done < <(echo "$job_list")
+	fi
+}
 function mk_human() {
 	val=`awk "BEGIN{sum=$1;
 	hum[1024**3]=\"Gb\";hum[1024**2]=\"Mb\";hum[1024]=\"Kb\"; 
@@ -78,5 +90,5 @@ if [[ -e /etc/motd-notes ]]; then
 		echo -e "\033[0;35m+ \033[0m- $line"
 	done < /etc/motd-notes
 fi
-
-echo -e "\033[0;35m++++++++++++++:\033[0;37m motd v$version \033[0;35m:+++++++++++++++\033[0m"
+get_open_jobs
+echo -e "\033[0;35m++++++++++++++:\033[0;37m motd v$version \033[0;35m:+++++++++++++\033[0m"
