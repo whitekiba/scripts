@@ -1,6 +1,6 @@
 #!/bin/bash
 #Beim verteilen ueber puppet sind die IPs durch facter werte zu ersetzen
-version="0.5.3"
+version="0.6"
 jobs_file="" #beim verteilen entsprechend anpassen
 usr_group=`id -gn`
 userid=`id -u`
