@@ -1,4 +1,6 @@
 #!/bin/bash
+#Beim verteilen ueber puppet sind die IPs durch facter werte zu ersetzen
+version="0.5.3"
 usr_group=`id -gn`
 userid=`id -u`
 
@@ -77,4 +79,4 @@ if [[ -e /etc/motd-notes ]]; then
 	done < /etc/motd-notes
 fi
 
-echo -e "\033[0;35m++++++++++++++:\033[0;37m motd v0.5.2 \033[0;35m:+++++++++++++++\033[0m"
+echo -e "\033[0;35m++++++++++++++:\033[0;37m motd v$version \033[0;35m:+++++++++++++++\033[0m"
